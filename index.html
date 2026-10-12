@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deseo (beta)</title>
+<style>
+:root{--dk:#6f8582;--win:#d9d5c7;--bar:#33426a;--ink:#1d1d1d;--red:#a3262a;--sub:#141414}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--dk);color:var(--ink);font:14px/1.45 Tahoma,Verdana,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+#top{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 10px;background:var(--win);border-bottom:2px solid #8d897c}
+#dl{font-weight:bold}
+button{font:inherit;color:var(--ink);background:var(--win);border:2px outset #f4f1e6;padding:5px 10px;cursor:pointer}
+button:active{border-style:inset}
+button:focus-visible{outline:2px dashed var(--red);outline-offset:2px}
+#sl{opacity:.45}#sl.on{opacity:1;background:#e7d9a8}
+#dk{display:flex;gap:8px;padding:10px;flex-wrap:wrap}
+#dk button.a{border-style:inset;background:#c9c5b6}
+#win{flex:1;margin:0 10px 10px;background:var(--win);border:2px outset #f4f1e6;overflow:auto;padding:0}
+#win:before{content:attr(data-t);display:block;background:var(--bar);color:#fff;padding:3px 8px;font-weight:bold;position:sticky;top:0}
+.in{padding:10px}
+.c{background:#f1eee3;border:1px solid #9a968a;margin:0 0 8px;padding:8px 10px;cursor:pointer}
+.c.n{border-left:5px solid var(--red)}
+.c i{color:#6b685e;font-size:12px;margin-left:6px}
+.c p{margin:4px 0 0}
+.ph{height:70px;margin-top:6px;background:repeating-linear-gradient(45deg,#b9b5a6 0 6px,#c6c2b3 6px 12px);display:none}
+.c:not(.n) .ph{display:block}
+.d{color:#5a574d}
+#g{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:10px 0}
+.k{text-align:center;padding:12px 6px;background:#efe6cf}
+.k small{color:#5a574d}
+#m{min-height:2.6em}
+#sb{min-height:84px;background:var(--sub);color:#eee9dc;font:20px/1.35 Georgia,serif;padding:14px 18px;text-align:center;display:flex;align-items:center;justify-content:center}
+</style></head><body>
+<div id="top"><span id="dl"></span><span><button id="rs">Reiniciar</button> <button id="sl">Dormir</button></span></div>
+<div id="dk"><button data-a="msg">Mensajes</button><button data-a="feed">Red</button><button data-a="foto">Fotos</button><button data-a="web">Navegador</button></div>
+<div id="win"></div>
+<div id="sb" aria-live="polite"></div>
+<script>
+/* DATOS: agregá días acá. a=app (msg/feed/foto) w=quién x=texto s=lo que dice el protagonista al abrir r=1 obligatorio */
+const D=[
+{t:"Viernes. Último día de clases.",i:[
+{a:"msg",w:"Fran",x:"jajaja boludo, te lo dije. Mirá cómo te dejó en el posteo.",s:"Él me dijo que me declarara. Él.",r:1},
+{a:"feed",w:"@lu_vz",x:"Hay gente que confunde amabilidad con otra cosa. Vergüenza ajena. (412 me gusta · \"JAJAJA\" · \"pobre\" · \"ya se sabía\")",s:"Cuatrocientas personas. Todos lo vieron.",r:1},
+{a:"msg",w:"Fran",x:"relajá, es un chiste. Mañana ya nadie se acuerda.",s:"Internet no se olvida."}]},
+{t:"Sábado. Primer día de vacaciones.",wish:1,i:[
+{a:"feed",w:"@foro_anon",x:"probé deseos.net y funciona. no pregunten.",s:"Un sitio de deseos. Qué tontería. Igual lo voy a mirar.",r:1},
+{a:"feed",w:"@memes_3am",x:"[meme] \"cuando alguien te quiere más de lo que pedís\". En una esquina, una carta de tarot dada vuelta.",s:"No sigo esta cuenta."},
+{a:"msg",w:"Fran",x:"no salgas de tu casa jaja"}]},
+{t:"Domingo.",i:[
+{a:"msg",w:"Alma",x:"Hola! Perdón que te escriba así. Vi lo que pasó con ese posteo y no me pareció justo. Soy Alma.",s:"Alguien me escribió. Alguien que no me conoce.",r:1},
+{a:"feed",w:"@alma",x:"Tirada de hoy: Los Enamorados al revés. Lo que todavía no se ve.",s:"Le gusta el tarot.",r:1},
+{a:"msg",w:"Fran",x:"con quién hablás? te veo conectado todo el día"}]},
+{t:"Lunes.",i:[
+{a:"msg",w:"Alma",x:"¿Qué escuchás? Yo Weezer todo el día 😂",r:1},
+{a:"msg",w:"Vos",x:"Weezer también!! No conozco a nadie que los escuche.",s:"Por fin alguien que entiende.",r:1},
+{a:"foto",w:"Vos",x:"[foto] Tu calle de noche, con grano de película. Alma comentó: \"me encanta cómo ves las cosas\".",s:"Nadie había dicho eso de mis fotos.",r:1}]},
+{t:"Martes.",i:[
+{a:"msg",w:"Alma",x:"Tengo un mazo desde los 12. ¿Te tiro una carta?",r:1},
+{a:"msg",w:"Alma",x:"Te salió Los Enamorados. Al revés. Jaja, no significa nada malo.",s:"Los Enamorados. Otra vez.",r:1},
+{a:"msg",w:"Alma",x:"¿A qué hora dormís? Yo casi no duermo.",r:1},
+{a:"foto",w:"Alma",x:"[foto] Su mazo sobre una mesa. Falta una carta.",s:"Hay un hueco en el mazo."}]},
+{t:"Miércoles.",i:[
+{a:"msg",w:"Alma",x:"¿Dónde vivís? Yo en otra ciudad, bastante lejos.",r:1},
+{a:"msg",w:"Vos",x:"En el centro, cerca de la plaza.",r:1},
+{a:"msg",w:"Alma",x:"Qué lindo por ahí. Estuve una vez.",s:"No le dije qué plaza.",r:1}]},
+{t:"Jueves.",i:[
+{a:"msg",w:"Alma",x:"Hoy te va a llegar algo. No preguntes 😊",r:1},
+{a:"foto",w:"Puerta",x:"[foto] En el felpudo: un KitKat y una carta de Los Enamorados (invertida). Nota: \"Para que no estés triste. A.\" Sin sello de correo.",s:"No tiene sello. ¿Quién lo trajo?",r:1}]}
+];
+const W=[["Plata","El Mago (I)"],["Amor","Los Enamorados (VI) invertida"],["Salud","La Estrella (XVII)"],["Abundancia","La Emperatriz (III)"],["Muerte","La Muerte (XIII)"],["Belleza","El Sol (XIX)"]];
+const $=id=>document.getElementById(id);
+let day=0,seen={},wish=0,A="msg",tm;
+try{const s=JSON.parse(localStorage.getItem("deseo")||"{}");day=s.day||0;seen=s.seen||{};wish=s.wish||0}catch(e){}
+const save=()=>{try{localStorage.setItem("deseo",JSON.stringify({day,seen,wish}))}catch(e){}};
+function sub(t){$("sb").textContent=t||"";clearTimeout(tm);if(t)tm=setTimeout(()=>$("sb").textContent="",7000)}
+function done(){const d=D[day];return d.i.every((it,n)=>!it.r||seen[day+"-"+n])&&(!d.wish||wish)}
+function top(){$("dl").textContent="Día "+(day+1)+" · "+D[day].t;$("sl").className=done()?"on":""}
+function render(){
+ const w=$("win");w.dataset.t={msg:"Mensajes",feed:"Red",foto:"Fotos",web:"Navegador"}[A];
+ document.querySelectorAll("#dk button").forEach(b=>b.className=b.dataset.a==A?"a":"");
+ if(A=="web"){web(w);return}
+ w.innerHTML='<div class="in"></div>';const box=w.firstChild;let any=0;
+ for(let d=day;d>=0;d--)for(let n=D[d].i.length-1;n>=0;n--){
+  const it=D[d].i[n];if(it.a!=A)continue;any=1;const k=d+"-"+n;
+  const c=document.createElement("div");c.className="c"+(seen[k]?"":" n");
+  c.innerHTML="<b>"+it.w+"</b><i>día "+(d+1)+"</i><p>"+(seen[k]?it.x:"Mensaje nuevo (tocá para abrir)")+"</p>"+(A=="foto"?'<div class="ph"></div>':"");
+  c.onclick=()=>{if(!seen[k]){seen[k]=1;save();sub(it.s);top();render()}};
+  box.appendChild(c)}
+ if(!any)box.innerHTML='<p class="d">Nada por ahora.</p>'}
+function web(w){
+ if(day<1){w.innerHTML='<div class="in d">Sin marcadores.</div>';return}
+ let h='<div class="in"><h3>deseos.net</h3><p class="d">Personas que usaron el sitio: <b>'+(7340+wish)+'</b></p>';
+ if(wish)h+="<p>Tu deseo fue registrado.</p>";
+ h+='<div id="g">';W.forEach((x,i)=>h+='<button class="k" data-i="'+i+'">'+x[0]+'<br><small>'+x[1]+'</small></button>');
+ w.innerHTML=h+'</div><div id="m"></div></div>';
+ w.querySelectorAll(".k").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,m=$("m");
+  if(i!=1){m.textContent="Este deseo no está disponible. Ya fue usado por alguien.";return}
+  if(wish){m.textContent="Ya pediste tu deseo.";return}
+  m.innerHTML='¿Es alguien en específico? <button id="y">Sí</button> <button id="no">No</button>';
+  $("y").onclick=()=>{m.textContent="";sub("No. No quiero pedir a alguien que ya me rechazó.")};
+  $("no").onclick=()=>{wish=1;save();top();render();sub("Listo. Ya está. Qué tontería.")}})}
+$("sl").onclick=()=>{
+ if(!done()){sub("Todavía me falta ver algo.");return}
+ if(day+1>=D.length){$("win").dataset.t="Fin";$("win").innerHTML='<div class="in"><h3>Fin de la beta</h3><p>Gracias por jugar. Contale a Claude qué te gustó y qué no.</p></div>';sub("");return}
+ day++;save();top();render();sub(D[day].t)};
+$("rs").onclick=()=>{if(confirm("¿Reiniciar el juego?")){try{localStorage.removeItem("deseo")}catch(e){}location.reload()}};
+document.querySelectorAll("#dk button").forEach(b=>b.onclick=()=>{A=b.dataset.a;render()});
+top();render();sub(D[day].t+(day?"":" Abrí las apps. Cuando termines, dormí."));
+</script></body></html>
