@@ -1,0 +1,60 @@
+/* DATOS. Día: t=título, req=chats obligatorios, ch={Contacto:[pasos]}, feed(Hilo)/gram(Rollo)/gal(Galería)=[[usuario,texto,imagen,me gusta,frase del protagonista,obligatorio,[comentarios]]], wish=1.
+ Pasos: "texto"=llega, ">texto"=lo mandás vos (lo tocás), "~texto"=lo dice el protagonista. P=mensajes de antes del juego. */
+const P={"Fran":["che, ya la tenés que invitar a salir a Lu, no seas gallina",">no sé...","dale boludo, mañana, yo te banco"],
+"Mamá":["Mati, ¿llevaste la campera? Hace frío",">sí ma","Hoy hay milanesas",">dale"],
+"Papá":["Mañana te llevo yo al cole, salgo temprano",">ok pa","Dormí bien que hay prueba",">dale"],
+"Curso 5°B":["Sofi: el viernes último día!! ¿hacemos algo después?","Tomi: yo llevo el parlante","Lu: ahí estoy 😊","Fran: Mati viene seguro jaja",">voy"]};
+const D=[
+{t:"Viernes. Último día de clases.",req:["Fran","Curso 5°B"],
+ch:{"Fran":["jajaja boludo, te lo dije. Mirá cómo te dejó en el posteo.","~Él me dijo que me declarara. Él.",">Vos me dijiste que le hablara.","dale, no te hagas el ofendido","relajá, es un chiste. Mañana ya nadie se acuerda.",">Ya lo vio todo el curso.","y bueno, así es internet","nos vemos en las vacaciones, no te encierres"],
+"Curso 5°B":["Sofi: ay no puedo con el posteo de Lu","Tomi: pobre Mati jaja","Sofi: bueno pero se re colgó","Lu: no es para tanto, era un chiste","Tomi: felices vacaciones gente!!","~Mejor no contesto."]},
+feed:[["@lu_vz","Hay gente que confunde amabilidad con otra cosa 🙄 (sí, Mati, hablo de vos)","captura de pantalla: el mensaje de Mati a Lu. «Hola Lu, hace tiempo que me gustás. ¿Querés salir conmigo?»",412,"Cuatrocientas personas. Todos saben que es por mí.",1,["@tomi_gol: jajajaja","@sofi.m: ay no 💀","@fran.k: Mati loco 😭","@lu_vz: no lo voy a borrar"]],["@tomi_gol","la captura de Mati jajajaja 💀 no puedo","captura de pantalla: el mensaje de Mati a Lu",88,"",0,["@fran.k: la mejor captura del año","@sofi.m: ya borrala Tomi"]],["@sofi.m","último día!!! felices vacaciones a todos 🏖","foto grupal del curso",230,"",0,["@lu_vz: los quiero!!","@tomi_gol: faltó Mati jaja"]],["@noticias24","Ola de calor: el fin de semana llegan los 38 grados","",1200],["@memes_3am","yo: voy a dormir temprano / yo a las 4am:","meme: gato frente a una pantalla",3400]],
+gram:[["@lu_vz","","Lu en la playa, atardecer",640],["@sofi.m","","selfie del curso en la puerta del colegio",310],["@fran.k","","unas zapatillas nuevas sobre una mesa",95]]},
+{t:"Sábado. Primer día de vacaciones.",wish:1,
+ch:{"Fran":["no salgas de tu casa jaja","¿vamos a jugar a la noche?",">no, hoy no","dale no te enojes","~Mejor me quedo solo."],
+"Curso 5°B":["Sofi: ¿alguien va a lo de Tomi hoy?","Tomi: sí vengan, hay pizza","Lu: yo llego tarde"]},
+feed:[["@foro_anon","probé deseos.net y funciona. no pregunten.","",3,"Un sitio de deseos. Qué tontería. Igual lo voy a mirar.",1,["@memes_3am: ¿qué sitio?","@foro_anon: deseos.net, no pregunten"]],["@memes_3am","cuando alguien te quiere más de lo que pedís","meme: un corazón dentro de una jaula",1900,"",0,["@sofi.m: jajaja literal","@tomi_gol: yo 💀"]],["@tomi_gol","pizza en mi casa, quién viene?","",41,"",0,["@sofi.m: voy!","@lu_vz: llego tarde"]],["@noticias24","Se viene una semana de lluvias en todo el país","",880]],
+gram:[["@sofi.m","","pizza sobre una mesa con vasos",120],["@lu_vz","","selfie con lentes de sol",410]]},
+{t:"Domingo.",req:["Alma"],
+ch:{"Alma":["Hola, ¿sos Mati? Perdón que te escriba así de la nada.","Vi el posteo de Lu que circuló por todos lados y me dio bronca. No estuvo bien lo que hizo.",">Hola... ¿quién sos?","Soy Alma. No nos conocemos, solo me llegó el posteo y quise decirte que no te lo merecías.","~Alguien que ni conozco se tomó el trabajo de escribirme.",">Gracias, de verdad. No sé qué decir.","No tenés que decir nada. A veces ayuda hablar con alguien que no te juzga.",">Sí... la verdad que sí.","Bueno, cuando quieras acá estoy 🙂"],
+"Fran":["con quién hablás? te veo conectado todo el día",">con nadie","jajaja bueno"]},
+feed:[["@foro_anon","alguien más probó el sitio? nadie contesta","",9],["@tomi_gol","domingo de fideos y siesta","",33],["@noticias24","Hallan una nueva especie de rana en la selva","",450]],
+gram:[["@alma","","taza de té y un libro junto a una ventana",34],["@sofi.m","","perro durmiendo en el sillón",98]]},
+{t:"Lunes.",req:["Alma"],
+ch:{"Alma":["Buen día Mati ☀️ ¿Cómo dormiste?",">Bien, medio mal en realidad. ¿Vos?","Yo bien. Estuve escuchando Weezer toda la noche 😂",">¿Weezer? No conozco a nadie que los escuche.","~Por fin alguien que entiende.","Jaja entonces somos dos. ¿Cuál es tu disco favorito?",">El azul, sin dudas.","¡El azul! El mío también 😂 Qué locura.","Vi que sacás fotos, tenés buen ojo. ¿Con qué cámara?",">Una vieja de mi papá, de rollo.","Qué lindo. Mandame más cuando quieras."],
+"Curso 5°B":["Sofi: ¿quién tiene los apuntes de historia?","Tomi: yo no jaja","Sofi: bueno, pregunto en otro lado"]},
+feed:[["@tomi_gol","lunes de playlist y mate","",20],["@noticias24","El dólar cerró estable tras una semana de subas","",310],["@memes_3am","cuando te dicen «tenemos que hablar»","meme: perro nervioso en un sillón",2700]],
+gram:[["@mati.fotos","","tu calle de noche, con grano de película",3,"Nadie había dicho eso de mis fotos.",1,["@alma: me encanta cómo ves las cosas","@fran.k: sacás fotos de viejo jaja"]],["@sofi.m","","mate y facturas sobre una mesa",75]]},
+{t:"Martes.",req:["Alma"],
+ch:{"Alma":["Hola Mati 😊 Perdón si te escribo mucho, es que me caés bien.",">Para nada, a mí me gusta hablar con vos.","Me alegra. Hoy estuve pensando en lo que dijiste de la cámara de tu papá.",">Ah, la uso casi todos los días. Me hace sentir tranquilo.","Lo entiendo. Yo me siento así con mi mazo de tarot, me lo regaló mi abuela cuando tenía 12.",">Nunca probé eso, la verdad.","Algún día te tiro las cartas 🙂","Cambiando de tema, ¿a qué hora te dormís? Yo casi no duermo.",">A las 2 más o menos. Soy medio nocturno.","Yo también 🌙 Qué bueno, entonces tengo con quién hablar de noche.",">Jaja sí, cuando quieras."],
+"Fran":["boludo estás desaparecido","¿seguís colgado con la compu?",">algo así","avisame cuando salgas de la cueva"]},
+feed:[["@tomi_gol","hoy salgo a andar en bici","",18],["@noticias24","Récord de calor para esta época del año","",640],["@lu_vz","nueva rutina de gym, sin excusas","",350,"",0,["@sofi.m: sos una máquina"]]],
+gram:[["@alma","","luna llena vista desde un balcón",52],["@fran.k","","una moto estacionada en la calle",60]]},
+{t:"Miércoles.",req:["Alma"],
+ch:{"Alma":["Mati, ¿puedo preguntarte algo?",">Sí, obvio.","¿Dónde vivís? Yo en otra ciudad, bastante lejos.",">En el centro, cerca de la plaza.","Qué lindo por ahí. Estuve una vez, hace años.","¿Y qué hacés para divertirte además de sacar fotos?",">Juego a la compu, miro series. Nada del otro mundo.","Me gusta eso, que seas tranquilo.","Me gustaría conocerte algún día.",">Estaría bueno.","Mañana te tengo una sorpresa 😊",">¿Qué sorpresa?","Es sorpresa. Dormí bien."],
+"Curso 5°B":["Tomi: vacaciones y ya extraño el cole jaja","Sofi: mentira, vos no extrañás nada","Lu: yo extraño a mi gato"]},
+feed:[["@noticias24","Hoy se estrena la película de superhéroes más esperada del año","",980],["@tomi_gol","¿alguien juega Marvel Rivals esta noche?","",27],["@memes_3am","yo mirando el reloj a las 3am: ya fue, ahora me quedo","meme: gato con ojeras",2100]],
+gram:[["@sofi.m","","atardecer en la costanera",200]]},
+{t:"Jueves.",req:["Mamá","Alma"],need:{"Alma":["Mamá","gal"]},lm:{"Mamá":"Primero veo qué quiere mamá.","gal":"Primero veo qué hay en Fotos."},
+ch:{"Mamá":["Mati, dejaron un paquete para vos en la puerta. No tiene remitente.",">¿Un paquete? Qué raro, no compré nada.","Te lo dejé sobre la cama. Fijate qué es.",">Dale, ahora voy."],
+"Alma":["¿Te llegó mi sorpresa? 😊",">Sí... ¿fuiste vos? No tenías que molestarte.","Quería que supieras que pienso en vos.",">Gracias, de verdad. Fue un lindo detalle.","Me alegra mucho 😊","Mañana te cuento más. Dormí bien, Mati."]},
+gal:[["","","paquete abierto sobre la cama: un KitKat y una nota escrita a mano. «Para que no estés triste. A.»",0,"Qué lindo detalle.",1]],
+feed:[["@noticias24","Ola de frío polar: bajan las temperaturas desde el viernes","",520],["@tomi_gol","quién se anota para el domingo de asado?","",36]],
+gram:[["@lu_vz","","Lu con su gato en la ventana",380]]}
+];
+
+/* USUARIOS. n=nombre b=bio a=foto de perfil (descripción) i=info extra pre=publicaciones de antes del juego */
+const U={
+"@mati.fotos":{n:"Mati",b:"23 · fotos de rollo · Weezer · Spider-Man y Legos · mi único vicio: los KitKat",a:"selfie de espaldas con una cámara colgada del cuello",pre:[
+["@mati.fotos","mi escritorio a las 3am. El KitKat de siempre 🍫","foto: escritorio con monitor, una caja de Lego de Spider-Man y un KitKat a medio comer",14],
+["@mati.fotos","por fin el azul en vinilo","foto: disco azul de Weezer sobre la cama",9],
+["@mati.fotos","la cámara de mi papá, rollo nuevo","foto: cámara de rollo vieja sobre un libro",6],
+["@mati.fotos","mi plaza de siempre","foto en blanco y negro: una plaza con un banco y un kiosco",11]]},
+"@lu_vz":{n:"Lu",b:"5°B · gym · mi gato se llama Mochi 🐱",a:"selfie en el espejo del gimnasio"},
+"@sofi.m":{n:"Sofi",b:"5°B · fotos de mi perro y de comida",a:"foto con su perro"},
+"@tomi_gol":{n:"Tomi",b:"fútbol, bici y pizza",a:"foto con camiseta de fútbol"},
+"@fran.k":{n:"Fran",b:"motos y zapatillas",a:"foto de espaldas junto a una moto"},
+"@alma":{n:"Alma",b:"té, libros y noches largas",a:"taza de té sobre una ventana",i:"Se unió hace poco"},
+"@foro_anon":{n:"anónimo",b:"",a:"avatar gris por defecto"},
+"@memes_3am":{n:"memes a las 3am",b:"memes para gente que no duerme",a:"luna con ojeras"},
+"@noticias24":{n:"Noticias 24",b:"las noticias del día",a:"logo azul con un reloj"}};

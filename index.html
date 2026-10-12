@@ -58,6 +58,7 @@ button:focus-visible{outline:2px dashed var(--red);outline-offset:2px}
 #sb:empty{display:none}
 #tk{height:48px;flex:none;background:#d4d4d4;border-top:2px solid #9a9a9a;display:flex;justify-content:space-between;align-items:center;padding:0 12px;z-index:10}
 #sl{opacity:.5}#sl.on{opacity:1;background:#e7d9a8}
+.u{background:none;border:0;padding:0;font-weight:bold;color:#2a3c70;text-decoration:underline}.cb{padding:1px 8px;margin-left:6px}.cms{margin-top:4px}.pf{width:30%;overflow:auto}.av{width:120px;height:120px;margin:10px 0;background:repeating-linear-gradient(45deg,#b9b5a6 0 6px,#c6c2b3 6px 12px);display:grid;place-items:center;text-align:center;font:italic 12px Tahoma;padding:6px}
 .ty i{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:#6b685e;animation:bl 1s infinite}.ty i:nth-child(2){animation-delay:.2s}.ty i:nth-child(3){animation-delay:.4s}@keyframes bl{50%{opacity:.2}}
 #fd{position:fixed;inset:0;z-index:20;background:#000;color:#e8e4d4;font:48px Georgia,serif;display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .9s}
 #fd.on{opacity:1;pointer-events:auto}
@@ -68,51 +69,8 @@ button:focus-visible{outline:2px dashed var(--red);outline-offset:2px}
 <div id="sb" aria-live="polite"></div>
 <div id="tk"><b id="dl"></b><span><button id="rs">Reiniciar</button> <button id="sl">Apagar</button></span></div>
 <div id="fd" class="on"></div>
+<script src="datos.js"></script>
 <script>
-/* DATOS. Día: t=título, req=chats obligatorios, ch={Contacto:[pasos]}, feed(Hilo)/gram(Rollo)/gal(Galería)=[[usuario,texto,imagen,me gusta,frase del protagonista,obligatorio,comentario]], wish=1.
- Pasos: "texto"=llega, ">texto"=lo mandás vos (lo tocás), "~texto"=lo dice el protagonista. P=mensajes de antes del juego. */
-const P={"Fran":["che, ya la tenés que invitar a salir a Lu, no seas gallina",">no sé...","dale boludo, mañana, yo te banco"],
-"Mamá":["Mati, ¿llevaste la campera? Hace frío",">sí ma","Hoy hay milanesas",">dale"],
-"Papá":["Mañana te llevo yo al cole, salgo temprano",">ok pa","Dormí bien que hay prueba",">dale"],
-"Curso 5°B":["Sofi: el viernes último día!! ¿hacemos algo después?","Tomi: yo llevo el parlante","Lu: ahí estoy 😊","Fran: Mati viene seguro jaja",">voy"]};
-const D=[
-{t:"Viernes. Último día de clases.",req:["Fran","Curso 5°B"],
-ch:{"Fran":["jajaja boludo, te lo dije. Mirá cómo te dejó en el posteo.","~Él me dijo que me declarara. Él.",">Vos me dijiste que le hablara.","dale, no te hagas el ofendido","relajá, es un chiste. Mañana ya nadie se acuerda.",">Ya lo vio todo el curso.","y bueno, así es internet","nos vemos en las vacaciones, no te encierres"],
-"Curso 5°B":["Sofi: ay no puedo con el posteo de Lu","Tomi: pobre Mati jaja","Sofi: bueno pero se re colgó","Lu: no es para tanto, era un chiste","Tomi: felices vacaciones gente!!","~Mejor no contesto."]},
-feed:[["@lu_vz","Hay gente que confunde amabilidad con otra cosa 🙄 (sí, Mati, hablo de vos)","captura de pantalla: el mensaje de Mati a Lu. «Hola Lu, hace tiempo que me gustás. ¿Querés salir conmigo?»",412,"Cuatrocientas personas. Todos saben que es por mí.",1],["@tomi_gol","la captura de Mati jajajaja 💀 no puedo","captura de pantalla: el mensaje de Mati a Lu",88],["@sofi.m","último día!!! felices vacaciones a todos 🏖","foto grupal del curso",230],["@noticias24","Ola de calor: el fin de semana llegan los 38 grados","",1200],["@memes_3am","yo: voy a dormir temprano / yo a las 4am:","meme: gato frente a una pantalla",3400]],
-gram:[["@lu_vz","","Lu en la playa, atardecer",640],["@sofi.m","","selfie del curso en la puerta del colegio",310],["@fran.k","","unas zapatillas nuevas sobre una mesa",95]]},
-{t:"Sábado. Primer día de vacaciones.",wish:1,
-ch:{"Fran":["no salgas de tu casa jaja","¿vamos a jugar a la noche?",">no, hoy no","dale no te enojes","~Mejor me quedo solo."],
-"Curso 5°B":["Sofi: ¿alguien va a lo de Tomi hoy?","Tomi: sí vengan, hay pizza","Lu: yo llego tarde"]},
-feed:[["@foro_anon","probé deseos.net y funciona. no pregunten.","",3,"Un sitio de deseos. Qué tontería. Igual lo voy a mirar.",1],["@memes_3am","cuando alguien te quiere más de lo que pedís","meme: un corazón dentro de una jaula",1900],["@tomi_gol","pizza en mi casa, quién viene?","",41],["@noticias24","Se viene una semana de lluvias en todo el país","",880]],
-gram:[["@sofi.m","","pizza sobre una mesa con vasos",120],["@lu_vz","","selfie con lentes de sol",410]]},
-{t:"Domingo.",req:["Alma"],
-ch:{"Alma":["Hola, ¿sos Mati? Perdón que te escriba así de la nada.","Vi el posteo de Lu que circuló por todos lados y me dio bronca. No estuvo bien lo que hizo.",">Hola... ¿quién sos?","Soy Alma. No nos conocemos, solo me llegó el posteo y quise decirte que no te lo merecías.","~Alguien que ni conozco se tomó el trabajo de escribirme.",">Gracias, de verdad. No sé qué decir.","No tenés que decir nada. A veces ayuda hablar con alguien que no te juzga.",">Sí... la verdad que sí.","Bueno, cuando quieras acá estoy 🙂"],
-"Fran":["con quién hablás? te veo conectado todo el día",">con nadie","jajaja bueno"]},
-feed:[["@foro_anon","alguien más probó el sitio? nadie contesta","",9],["@tomi_gol","domingo de fideos y siesta","",33],["@noticias24","Hallan una nueva especie de rana en la selva","",450]],
-gram:[["@alma","","taza de té y un libro junto a una ventana",34],["@sofi.m","","perro durmiendo en el sillón",98]]},
-{t:"Lunes.",req:["Alma"],
-ch:{"Alma":["Buen día Mati ☀️ ¿Cómo dormiste?",">Bien, medio mal en realidad. ¿Vos?","Yo bien. Estuve escuchando Weezer toda la noche 😂",">¿Weezer? No conozco a nadie que los escuche.","~Por fin alguien que entiende.","Jaja entonces somos dos. ¿Cuál es tu disco favorito?",">El azul, sin dudas.","¡El azul! El mío también 😂 Qué locura.","Vi que sacás fotos, tenés buen ojo. ¿Con qué cámara?",">Una vieja de mi papá, de rollo.","Qué lindo. Mandame más cuando quieras."],
-"Curso 5°B":["Sofi: ¿quién tiene los apuntes de historia?","Tomi: yo no jaja","Sofi: bueno, pregunto en otro lado"]},
-feed:[["@tomi_gol","lunes de playlist y mate","",20],["@noticias24","El dólar cerró estable tras una semana de subas","",310],["@memes_3am","cuando te dicen «tenemos que hablar»","meme: perro nervioso en un sillón",2700]],
-gram:[["@vos","","tu calle de noche, con grano de película",2,"Nadie había dicho eso de mis fotos.",1,"@alma: me encanta cómo ves las cosas"],["@sofi.m","","mate y facturas sobre una mesa",75]]},
-{t:"Martes.",req:["Alma"],
-ch:{"Alma":["Hola Mati 😊 Perdón si te escribo mucho, es que me caés bien.",">Para nada, a mí me gusta hablar con vos.","Me alegra. Hoy estuve pensando en lo que dijiste de la cámara de tu papá.",">Ah, la uso casi todos los días. Me hace sentir tranquilo.","Lo entiendo. Yo me siento así con mi mazo de tarot, me lo regaló mi abuela cuando tenía 12.",">Nunca probé eso, la verdad.","Algún día te tiro las cartas 🙂","Cambiando de tema, ¿a qué hora te dormís? Yo casi no duermo.",">A las 2 más o menos. Soy medio nocturno.","Yo también 🌙 Qué bueno, entonces tengo con quién hablar de noche.",">Jaja sí, cuando quieras."],
-"Fran":["boludo estás desaparecido","¿seguís colgado con la compu?",">algo así","avisame cuando salgas de la cueva"]},
-feed:[["@tomi_gol","hoy salgo a andar en bici","",18],["@noticias24","Récord de calor para esta época del año","",640],["@lu_vz","nueva rutina de gym, sin excusas","",350]],
-gram:[["@alma","","luna llena vista desde un balcón",52],["@fran.k","","una moto estacionada en la calle",60]]},
-{t:"Miércoles.",req:["Alma"],
-ch:{"Alma":["Mati, ¿puedo preguntarte algo?",">Sí, obvio.","¿Dónde vivís? Yo en otra ciudad, bastante lejos.",">En el centro, cerca de la plaza.","Qué lindo por ahí. Estuve una vez, hace años.","¿Y qué hacés para divertirte además de sacar fotos?",">Juego a la compu, miro series. Nada del otro mundo.","Me gusta eso, que seas tranquilo.","Me gustaría conocerte algún día.",">Estaría bueno.","Mañana te tengo una sorpresa 😊",">¿Qué sorpresa?","Es sorpresa. Dormí bien."],
-"Curso 5°B":["Tomi: vacaciones y ya extraño el cole jaja","Sofi: mentira, vos no extrañás nada","Lu: yo extraño a mi gato"]},
-feed:[["@noticias24","Hoy se estrena la película de superhéroes más esperada del año","",980],["@tomi_gol","¿alguien juega Marvel Rivals esta noche?","",27],["@memes_3am","yo mirando el reloj a las 3am: ya fue, ahora me quedo","meme: gato con ojeras",2100]],
-gram:[["@sofi.m","","atardecer en la costanera",200]]},
-{t:"Jueves.",req:["Mamá","Alma"],need:{"Alma":["Mamá","gal"]},
-ch:{"Mamá":["Mati, dejaron un paquete para vos en la puerta. No tiene remitente.",">¿Un paquete? Qué raro, no compré nada.","Te lo dejé sobre la cama. Fijate qué es.",">Dale, ahora voy."],
-"Alma":["¿Te llegó mi sorpresa? 😊",">Sí... ¿fuiste vos? No tenías que molestarte.","Quería que supieras que pienso en vos.",">Gracias, de verdad. Fue un lindo detalle.","Me alegra mucho 😊","Mañana te cuento más. Dormí bien, Mati."]},
-gal:[["","","paquete abierto sobre la cama: un KitKat y una nota escrita a mano. «Para que no estés triste. A.»",0,"Qué lindo detalle.",1]],
-feed:[["@noticias24","Ola de frío polar: bajan las temperaturas desde el viernes","",520],["@tomi_gol","quién se anota para el domingo de asado?","",36]],
-gram:[["@lu_vz","","Lu con su gato en la ventana",380]]}
-];
 const W=[["Plata","El Mago","I"],["Amor","Los Enamorados","VI"],["Salud","La Estrella","XVII"],["Abundancia","La Emperatriz","III"],["Muerte","La Muerte","XIII"],["Belleza","El Sol","XIX"]];
 const S=p=>'<svg viewBox="0 0 16 16" width="44" height="44" shape-rendering="crispEdges" fill="none" stroke="#1b1b1b">'+p+"</svg>";
 const IC={hilo:S('<path d="M1.5 2.5h13v8h-6l-3 3v-3h-4z" fill="#cfd8dc"/><path d="M4 5.5h8M4 7.5h5"/>'),
@@ -124,12 +82,13 @@ jgo:S('<rect x="1.5" y="5.5" width="13" height="6" rx="2" fill="#b8b2d8"/><path 
 tra:S('<path d="M4 4.5h8l-1 9H5z" fill="#cfd8dc"/><path d="M3 4.5h10M6.5 2.5h3v2M6.5 7v4M9.5 7v4"/>')};
 const $=i=>document.getElementById(i),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
 const KEY={hilo:"feed",rollo:"gram",gal:"gal"};
-let day=0,seen={},prog={},wish=0,A=null,C=null,tm,was=0,ty={};
+let day=0,seen={},prog={},wish=0,A=null,C=null,tm,was=0,ty={},PF=null;
 try{const s=JSON.parse(localStorage.getItem("deseo3")||"{}");day=s.day||0;seen=s.seen||{};prog=s.prog||{};wish=s.wish||0}catch(e){}
 const save=()=>{try{localStorage.setItem("deseo3",JSON.stringify({day,seen,prog,wish}))}catch(e){}};
 function sub(t){$("sb").textContent=t||"";clearTimeout(tm);if(t)tm=setTimeout(()=>$("sb").textContent="",7000)}
 const cts=()=>{const s=Object.keys(P);for(let d=0;d<=day;d++)for(const c in D[d].ch||{})if(!s.includes(c))s.push(c);
  const o=(D[day].req||[]).concat(Object.keys(D[day].ch||{}));return s.sort((a,b)=>(o.indexOf(a)+1||99)-(o.indexOf(b)+1||99))};
+const lockMsg=c=>{const x=((D[day].need||{})[c]||[]).find(x=>KEY[x]?pend(x):left(x));return (D[day].lm||{})[x]||"Todavía no."};
 const locked=c=>((D[day].need||{})[c]||[]).some(x=>KEY[x]?pend(x):left(x));
 const left=c=>((D[day].ch||{})[c]||[]).length-(prog[day+"|"+c]||0)>0;
 function pend(a){const d=D[day];
@@ -147,28 +106,39 @@ function pump(c){const d=day;if(ty[c]||locked(c))return;
  if(m==null||m[0]==">")return;
  ty[c]=1;if(A=="msg")render();
  setTimeout(()=>{prog[k]=p+1;save();ty[c]=0;if(m[0]=="~")sub(m.slice(1));if(A=="msg")render();hdr();if(d==day)pump(c)},m[0]=="~"?400:900+Math.min(m.length,60)*22)}
+function card(it,key,a){const p=E("div","p"),g=a=="gal",c=it[6]||[];
+ let h=g?"":'<button class="u">'+it[0]+"</button>";
+ if(it[2])h+='<div class="im">'+it[2]+"</div>";
+ if(it[1])h+="<p>"+it[1]+"</p>";
+ if(!g)h+='<div class="ct">♡ '+it[3]+(a=="hilo"?"  ⇄ "+(it[3]/9|0):"")+'  <button class="cb">✎ '+c.length+'</button></div><div class="cms" hidden>'+(c.length?c.map(x=>'<div class="cm">'+x+"</div>").join(""):'<div class="cm d">Sin comentarios.</div>')+"</div>";
+ p.innerHTML=h;
+ const u=p.querySelector(".u");if(u)u.onclick=()=>{PF=it[0];render()};
+ const cb=p.querySelector(".cb");if(cb)cb.onclick=()=>{const m=p.querySelector(".cms");m.hidden=!m.hidden};
+ if(key){p.dataset.k=key;if(it[5]&&!seen[key])obs.observe(p)}
+ return p}
+function prof(b){
+ const u=U[PF]||{n:PF,b:"",a:"foto de perfil por defecto"};b.className="sp";
+ b.append(E("div","pf",'<button id="bk">← Volver</button><div class="av">'+u.a+"</div><h2>"+u.n+'</h2><div class="d">'+PF+(u.i?" · "+u.i:"")+"</div><p>"+(u.b||"")+"</p>"));
+ const col=E("div","col");b.append(col);let any=0;
+ for(let d=day;d>=0;d--)["feed","gram"].forEach(k=>(D[d][k]||[]).forEach(it=>{if(it[0]==PF){any=1;col.append(card(it,null,k=="feed"?"hilo":"rollo"))}}));
+ (u.pre||[]).forEach(it=>{any=1;col.append(card(it,null,"rollo"))});
+ if(!any)col.innerHTML='<p class="d">Sin publicaciones.</p>';
+ $("bk").onclick=()=>{PF=null;render()}}
 function feed(b,a){
- const g=a=="gal",k=KEY[a];b.className="sp";
+ const g=a=="gal",k=KEY[a];if(PF&&!g)return prof(b);b.className="sp";
  if(!g)b.append(E("h1","an",a=="hilo"?"Hilo":"Rollo"));
  const col=E("div","col");b.append(col);let any=0;
- for(let d=day;d>=0;d--)(D[d][k]||[]).forEach((it,n)=>{any=1;
-  const key=k+"-"+d+"-"+n,p=E("div","p"),q=it[3];p.dataset.k=key;let h=g?"":"<b>"+it[0]+"</b>";
-  if(it[2])h+='<div class="im">'+it[2]+"</div>";
-  if(it[1])h+="<p>"+it[1]+"</p>";
-  if(!g)h+='<div class="ct">♡ '+q+(a=="hilo"?"  ⇄ "+(q/9|0)+"  ✎ "+(q/5|0):"")+"</div>";
-  if(it[6])h+='<div class="cm">'+it[6]+"</div>";
-  p.innerHTML=h;col.append(p);if(it[5]&&!seen[key])obs.observe(p)});
+ for(let d=day;d>=0;d--)(D[d][k]||[]).forEach((it,n)=>{any=1;col.append(card(it,k+"-"+d+"-"+n,a))});
  if(!any)col.innerHTML='<p class="d">Nada por ahora.</p>'}
 function chat(b){
  b.className="";const l=E("div","cl");
- cts().forEach(c=>{const k=E("button","k2"+(c==C?" on":""),c+(locked(c)?" 🔒":left(c)?" ●":""));k.onclick=()=>{C=c;pump(c);render()};l.append(k)});
+ cts().forEach(c=>{const k=E("button","k2"+(c==C?" on":""),c+(left(c)&&!locked(c)?" ●":""));k.onclick=()=>{if(locked(c)){sub(lockMsg(c));return}C=c;pump(c);render()};l.append(k)});
  const p=E("div","cp"),ms=E("div","ms"),br=E("div","bar"),add=s=>{if(s[0]=="~")return;const me=s[0]==">";ms.append(E("div","m"+(me?" me":""),me?s.slice(1):s))};
  (P[C]||[]).forEach(add);
  for(let d=0;d<=day;d++){const st=(D[d].ch||{})[C]||[],n=d<day?st.length:(prog[d+"|"+C]||0);st.slice(0,n).forEach(add)}
  const st=(D[day].ch||{})[C]||[],pn=prog[day+"|"+C]||0,nx=st[pn];
  if(ty[C]&&nx&&nx[0]!="~"&&nx[0]!=">")ms.append(E("div","m ty","<i></i><i></i><i></i>"));
- if(locked(C))br.append(E("span","d","Todavía no."));
- else if(nx&&nx[0]==">"){const s=E("button","snd",nx.slice(1));s.onclick=()=>{prog[day+"|"+C]=pn+1;save();hdr();render();pump(C)};br.append(s)}
+ if(nx&&nx[0]==">"){const s=E("button","snd",nx.slice(1));s.onclick=()=>{prog[day+"|"+C]=pn+1;save();hdr();render();pump(C)};br.append(s)}
  else br.append(E("span","d","mensaje"));
  p.append(ms,br);b.append(l,p);ms.scrollTop=ms.scrollHeight}
 function web(b){
@@ -190,14 +160,14 @@ function render(){
  const b=$("wb");b.innerHTML="";b.className="";obs.disconnect();
  if(A=="tra"){b.innerHTML='<div class="in d">La papelera está vacía.</div>';return}
  ({hilo:()=>feed(b,"hilo"),rollo:()=>feed(b,"rollo"),gal:()=>feed(b,"gal"),msg:()=>chat(b),web:()=>web(b)})[A]()}
-function go(a){A=a;
- if(a=="msg"){const c=cts();if(!C||!c.includes(C))C=c.find(x=>left(x)&&!locked(x))||c[0];pump(C)}
+function go(a){A=a;PF=null;
+ if(a=="msg"){const c=cts();if(!C||!c.includes(C)||locked(C))C=c.find(x=>left(x)&&!locked(x))||c[0];pump(C)}
  $("wtt").textContent={hilo:"Hilo",msg:"Mensajes",rollo:"Rollo",gal:"Galería",web:"Navegador",tra:"Papelera"}[a];
  $("wn").hidden=false;render()}
 [["hilo","Hilo"],["msg","Mensajes"],["rollo","Rollo"],["gal","Galería"],["web","Navegador"],["jgo","Juego"]].forEach(a=>{
  const b=E("button","i",IC[a[0]]+a[1]);b.id="i_"+a[0];if(a[0]=="jgo")b.disabled=true;else b.onclick=()=>go(a[0]);$("ic").append(b)});
 $("tr").innerHTML=IC.tra+"Papelera";$("tr").onclick=()=>go("tra");
-$("x").onclick=()=>{A=null;$("wn").hidden=true};
+$("x").onclick=()=>{A=null;PF=null;$("wn").hidden=true};
 function fade(t,f){const e=$("fd");e.textContent=t;e.className="on";setTimeout(()=>{f();setTimeout(()=>e.className="",1500)},1000)}
 $("sl").onclick=()=>{
  if(!done()){sub("Todavía no quiero apagar.");return}
