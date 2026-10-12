@@ -30,7 +30,8 @@ button:focus-visible{outline:2px dashed var(--red);outline-offset:2px}
 .p{background:#f1eee3;border:1px solid #9a968a;border-radius:10px;padding:10px;margin-bottom:12px}
 .im{margin:6px 0;min-height:120px;background:repeating-linear-gradient(45deg,#b9b5a6 0 6px,#c6c2b3 6px 12px);display:grid;place-items:center;text-align:center;padding:8px;font-style:italic}
 .im.ph{padding:0;min-height:0;background:none;display:block}.im.ph.nat img{aspect-ratio:auto;max-width:100%;height:auto;object-fit:contain}
-.im.ph img{display:block;width:100%;max-width:380px;aspect-ratio:1/1;object-fit:cover;border-radius:6px}
+.dv{align-self:center;font-size:12px;color:#5a574d;background:#e7e2d2;border-radius:10px;padding:2px 12px;margin:6px 0}
+.im.ph img{display:block;margin:0 auto;width:100%;max-width:380px;aspect-ratio:1/1;object-fit:cover;border-radius:6px}
 .ct{color:#5a574d;margin-top:4px}
 .cm{margin-top:6px;border-top:1px solid #c9c5b6;padding-top:4px}
 .cl{width:200px;border-right:1px solid #9a968a;padding:10px;overflow:auto;display:flex;flex-direction:column;gap:6px}
@@ -69,7 +70,7 @@ button:focus-visible{outline:2px dashed var(--red);outline-offset:2px}
 <button class="i" id="tr"></button>
 <div id="wn" hidden><div id="wt"><span id="wtt"></span><button id="x" aria-label="Cerrar">×</button></div><div id="wb"></div></div></div>
 <div id="sb" aria-live="polite"></div>
-<div id="tk"><b id="dl"></b><span><button id="rs">Reiniciar</button> <button id="sl">Apagar</button></span></div>
+<div id="tk"><b id="dl"></b><span><button id="ad">Admin</button> <button id="rs">Reiniciar</button> <button id="sl">Apagar</button></span></div>
 <div id="fd" class="on"></div>
 <script src="datos.js"></script>
 <script>
@@ -85,23 +86,23 @@ tra:S('<path d="M4 4.5h8l-1 9H5z" fill="#cfd8dc"/><path d="M3 4.5h10M6.5 2.5h3v2
 const $=i=>document.getElementById(i),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
 const ip=f=>'src="'+f+'" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=\''+f+'\'}else{this.replaceWith(\'[falta '+f+']\')}"';
 const KEY={hilo:"feed",rollo:"gram",gal:"gal"};
-let day=0,seen={},prog={},wish=0,uw=0,A=null,C=null,tm,was=0,ty={},PF=null;
-try{const s=JSON.parse(localStorage.getItem("deseo3")||"{}");day=s.day||0;seen=s.seen||{};prog=s.prog||{};wish=s.wish||0;uw=s.uw||wish||0}catch(e){}
-const save=()=>{try{localStorage.setItem("deseo3",JSON.stringify({day,seen,prog,wish,uw}))}catch(e){}};
+let day=0,seen={},prog={},wish=0,uw=0,w2=0,A=null,C=null,tm,was=0,bd=-1,ty={},PF=null;
+try{const s=JSON.parse(localStorage.getItem("deseo3")||"{}");day=s.day||0;seen=s.seen||{};prog=s.prog||{};wish=s.wish||0;uw=s.uw||wish||0;w2=s.w2||0}catch(e){}
+const save=()=>{try{localStorage.setItem("deseo3",JSON.stringify({day,seen,prog,wish,uw,w2}))}catch(e){}};
 function sub(t){$("sb").textContent=t||"";clearTimeout(tm);if(t)tm=setTimeout(()=>$("sb").textContent="",7000)}
 const cts=()=>{const s=Object.keys(P);for(let d=0;d<=day;d++)for(const c in D[d].ch||{})if(!s.includes(c))s.push(c);
  const o=(D[day].req||[]).concat(Object.keys(D[day].ch||{}));return s.sort((a,b)=>(o.indexOf(a)+1||99)-(o.indexOf(b)+1||99))};
-const lockMsg=c=>{const x=((D[day].need||{})[c]||[]).find(x=>KEY[x]?pend(x):left(x));return (D[day].lm||{})[x]||"Todavía no."};
-const locked=c=>((D[day].need||{})[c]||[]).some(x=>KEY[x]?pend(x):left(x));
+const lockMsg=c=>{const x=((D[day].need||{})[c]||[]).find(x=>(KEY[x]||x=="web")?pend(x):left(x));return (D[day].lm||{})[x]||"Todavía no."};
+const locked=c=>((D[day].need||{})[c]||[]).some(x=>(KEY[x]||x=="web")?pend(x):left(x));
 const left=c=>((D[day].ch||{})[c]||[]).length-(prog[day+"|"+c]||0)>0;
 function pend(a){const d=D[day];
- if(a=="msg")return (d.req||[]).some(left);
- if(a=="web")return !!(d.wish&&!wish&&uw);
+ if(a=="msg")return Object.keys(d.ch||{}).some(left);
+ if(a=="web")return !!(d.wish&&!wish&&uw)||!!(d.wish2&&!w2);
  const k=KEY[a];return (d[k]||[]).some((it,n)=>it[5]&&!seen[k+"-"+day+"-"+n])||(a=="hilo"&&!!d.wish&&!wish&&!uw)}
 const done=()=>["msg","web","hilo","rollo","gal"].every(a=>!pend(a));
 function hdr(){$("dl").textContent="Día "+(day+1)+" · "+D[day].t;const f=done();$("sl").className=f?"on":"";
  ["hilo","msg","rollo","gal","web"].forEach(a=>$("i_"+a).classList.toggle("bd",!!pend(a)));
- if(f&&!was)setTimeout(()=>{if(done())sub("Ya debería ir a dormir.")},4500);was=f}
+ if(f&&!was&&bd!=day){bd=day;setTimeout(()=>{if(done())sub(D[day].sm||"Ya debería ir a dormir.")},2200)}was=f}
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const k=e.target.dataset.k;
  if(!seen[k]){seen[k]=1;save();const p=k.split("-");sub(D[p[1]][p[0]][p[2]][4]);hdr()}obs.unobserve(e.target)}),{threshold:.5});
 function pump(c){const d=day;if(ty[c]||locked(c))return;
@@ -116,7 +117,7 @@ const LK=s=>s.replace(/uwish\.net/g,'<button class="lk">uwish.net</button>');
 function card(it,key,a){const p=E("div","p"),g=a=="gal",c=it[6]||[];
  const uf=U[it[0]]&&U[it[0]].f?'<img class="ao" '+ip(U[it[0]].f)+' alt="">':"";
  let h=g?"":'<button class="u">'+uf+it[0]+"</button>";
- const mm=it[2]&&/^\[([^\]]+)\]\s*([\s\S]*)$/.exec(it[2]),dsc=mm?mm[2]:it[2],nat=mm&&mm[1][0]=="=",fn=mm?mm[1].replace(/^=/,""):"";
+ const mm=it[2]&&/^\[([^\]]+)\]\s*([\s\S]*)$/.exec(it[2]),dsc=mm?mm[2]:it[2],nat=mm&&(mm[1][0]=="="||g),fn=mm?mm[1].replace(/^=/,""):"";
  if(it[2])h+=mm?'<div class="im ph'+(nat?" nat":"")+'"><img src="'+fn+'" alt=""></div>':'<div class="im">'+it[2]+"</div>";
  if(it[1])h+="<p>"+LK(it[1])+"</p>";
  if(!g)h+='<div class="ct">♡ '+it[3]+(a=="hilo"?"  ⇄ "+(it[3]/9|0):"")+'  <button class="cb">✎ '+c.length+'</button></div><div class="cms" hidden>'+(c.length?c.map(x=>'<div class="cm">'+LK(x)+"</div>").join(""):'<div class="cm d">Sin comentarios.</div>')+"</div>";
@@ -147,8 +148,8 @@ function chat(b){
  b.className="";const l=E("div","cl");
  cts().forEach(c=>{const k=E("button","k2"+(c==C?" on":""),c+(left(c)&&!locked(c)?" ●":""));k.onclick=()=>{if(locked(c)){sub(lockMsg(c));return}C=c;pump(c);render()};l.append(k)});
  const p=E("div","cp"),ms=E("div","ms"),br=E("div","bar"),add=s=>{if(s[0]=="~")return;const me=s[0]==">";ms.append(E("div","m"+(me?" me":""),me?s.slice(1):s))};
- (P[C]||[]).forEach(add);
- for(let d=0;d<=day;d++){const st=(D[d].ch||{})[C]||[],n=d<day?st.length:(prog[d+"|"+C]||0);st.slice(0,n).forEach(add)}
+ const dv=t=>ms.append(E("div","dv",t));if((P[C]||[]).some(s=>s[0]!="~"))dv("Antes");(P[C]||[]).forEach(add);
+ for(let d=0;d<=day;d++){const st=(D[d].ch||{})[C]||[],n=d<day?st.length:(prog[d+"|"+C]||0);const sh=st.slice(0,n);if(sh.some(s=>s[0]!="~"))dv("Día "+(d+1)+" · "+D[d].t.split(".")[0]);sh.forEach(add)}
  const st=(D[day].ch||{})[C]||[],pn=prog[day+"|"+C]||0,nx=st[pn];
  if(ty[C]&&pn>0&&nx&&nx[0]!="~"&&nx[0]!=">")ms.append(E("div","m ty","<i></i><i></i><i></i>"));
  if(nx&&nx[0]==">"){const s=E("button","snd",nx.slice(1));s.onclick=()=>{prog[day+"|"+C]=pn+1;save();hdr();render();pump(C)};br.append(s)}
@@ -162,24 +163,29 @@ function web(b){
  const nt=E("div","nt",wish?"Tu deseo fue registrado.":""),g=E("div","gr");b.append(nt);
  W.forEach((w,i)=>{const e=E("div","w p"+i,"<span>"+w[0]+'</span><button class="cd'+(i==1?" inv":"")+'"><b>'+w[2]+"</b><small>"+w[1]+"</small></button>");
   e.lastChild.onclick=()=>{
-   if(i!=1){nt.textContent="Este deseo no está disponible. Ya fue usado por alguien.";return}
-   if(wish){nt.textContent="Ya pediste tu deseo.";return}
+   const m2=i==4&&D[day].wish2&&!w2;if(i!=1&&!m2){nt.textContent="Este deseo no está disponible. Ya fue usado por alguien.";return}
+   if(wish&&!m2){nt.textContent="Ya pediste tu deseo.";return}
    const m=E("div","md",'<div><p>¿Es alguien en específico?</p><button id="y">Sí</button> <button id="no">No</button></div>');b.append(m);
-   $("y").onclick=()=>{m.remove();sub("No. No quiero pedir a alguien que ya me rechazó.")};
-   $("no").onclick=()=>{wish=1;save();hdr();render();sub("Listo. Ya está. Qué tontería.")}};
+   $("y").onclick=()=>{if(m2){w2=1;save();hdr();render();sub("Que Vera muera. Que no vuelva a tocar a nadie.");return}m.remove();sub("No. No quiero pedir a alguien que ya me rechazó.")};
+   $("no").onclick=()=>{if(m2){m.remove();sub("Tiene que ser ella.");return}wish=1;save();hdr();render();sub("Listo. Ya está. Qué tontería.")}};
   g.append(e)});
  b.append(g)}
+function jump(i){Object.keys(prog).forEach(k=>{if(k.split("|")[0]==i)delete prog[k]});Object.keys(seen).forEach(k=>{if(k.split("-")[1]==i)delete seen[k]});
+ if(i>=1){wish=1;uw=1}w2=D.findIndex(x=>x.wish2)<i?1:0;
+ fade("Día "+(i+1),()=>{day=i;ty={};was=0;bd=-1;save();A=null;PF=null;$("wn").hidden=true;hdr();sub(D[day].t)})}
+function adm(b){b.className="wbw";const g=E("div","in");g.append(E("p","d","Saltar a un día (reinicia el progreso de ese día):"));
+ D.forEach((x,i)=>{const k=E("button","k2",(i+1)+" · "+x.t);k.style.cssText="display:block;margin:3px 0;width:100%";k.onclick=()=>jump(i);g.append(k)});b.append(g)}
 function render(){
  const b=$("wb");b.innerHTML="";b.className="";obs.disconnect();
  if(A=="tra"){b.innerHTML='<div class="in d">La papelera está vacía.</div>';return}
- ({hilo:()=>feed(b,"hilo"),rollo:()=>feed(b,"rollo"),gal:()=>feed(b,"gal"),msg:()=>chat(b),web:()=>web(b)})[A]()}
+ ({hilo:()=>feed(b,"hilo"),rollo:()=>feed(b,"rollo"),gal:()=>feed(b,"gal"),msg:()=>chat(b),web:()=>web(b),adm:()=>adm(b)})[A]()}
 function go(a){A=a;PF=null;
  if(a=="msg"){const c=cts();if(!C||!c.includes(C)||locked(C))C=c.find(x=>left(x)&&!locked(x))||c[0];pump(C)}
- $("wtt").textContent={hilo:"SayIt",msg:"Ping",rollo:"Popping",gal:"Galería",web:"Navegador",tra:"Papelera"}[a];
+ $("wtt").textContent={hilo:"SayIt",msg:"Ping",rollo:"Popping",gal:"Galería",web:"Navegador",tra:"Papelera",adm:"Admin"}[a];
  $("wn").hidden=false;render()}
 [["hilo","SayIt"],["msg","Ping"],["rollo","Popping"],["gal","Galería"],["web","Navegador"],["jgo","Juego"]].forEach(a=>{
  const b=E("button","i",IC[a[0]]+a[1]);b.id="i_"+a[0];if(a[0]=="jgo")b.disabled=true;else b.onclick=()=>go(a[0]);$("ic").append(b)});
-$("tr").innerHTML=IC.tra+"Papelera";$("tr").onclick=()=>go("tra");
+$("tr").innerHTML=IC.tra+"Papelera";$("tr").onclick=()=>go("tra");$("ad").onclick=()=>go("adm");
 $("x").onclick=()=>{A=null;PF=null;$("wn").hidden=true};
 function fade(t,f){const e=$("fd");e.textContent=t;e.className="on";setTimeout(()=>{f();setTimeout(()=>e.className="",1500)},1000)}
 $("sl").onclick=()=>{
