@@ -110,6 +110,7 @@ function pump(c){const d=day;if(ty[c]||locked(c))return;
  const first=p==0&&m[0]!="~"&&m[0]!=">";
  ty[c]=1;if(!first&&A=="msg")render();
  setTimeout(()=>{prog[k]=p+1;save();ty[c]=0;if(m[0]=="~")sub(m.slice(1));if(A=="msg")render();hdr();if(d==day)pump(c)},m[0]=="~"?400:first?0:900+Math.min(m.length,60)*22)}
+const rl=u=>{if(typeof u.r!="object")return u.r||"";let r="";for(const k in u.r)if(+k<=day)r=u.r[k];return r};
 const bio=u=>{if(typeof u.b!="object")return u.b||"";let r="";for(const k in u.b)if(+k<=day)r=u.b[k];return r};
 const LK=s=>s.replace(/uwish\.net/g,'<button class="lk">uwish.net</button>');
 function card(it,key,a){const p=E("div","p"),g=a=="gal",c=it[6]||[];
@@ -134,6 +135,7 @@ function prof(b){
  (u.pre||[]).forEach(it=>{any=1;col.append(card(it,null,"rollo"))});
  if(!any)col.innerHTML='<p class="d">Sin publicaciones.</p>';
  if(u.sb&&!bio(u)&&!seen["sb"+PF]){seen["sb"+PF]=1;save();sub(u.sb)}
+ const r=rl(u);if(r&&!seen["r"+PF+r]){seen["r"+PF+r]=1;save();sub(r)}
  $("bk").onclick=()=>{PF=null;render()}}
 function feed(b,a){
  const g=a=="gal",k=KEY[a];if(PF&&!g)return prof(b);b.className="sp";
