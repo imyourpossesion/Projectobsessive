@@ -71,7 +71,7 @@ button:focus-visible{outline:2px dashed var(--red);outline-offset:2px}
 <div id="fd" class="on"></div>
 <script src="datos.js"></script>
 <script>
-const W=[["Plata","El Mago","I"],["Amor","Los Enamorados","VI"],["Salud","La Estrella","XVII"],["Abundancia","La Emperatriz","III"],["Muerte","La Muerte","XIII"],["Belleza","El Sol","XIX"]];
+const W=[["Dinero","El Mago","I"],["Amor","Los Enamorados","VI"],["Salud","La Estrella","XVII"],["Abundancia","La Emperatriz","III"],["Muerte","La Muerte","XIII"],["Belleza","El Sol","XIX"]];
 const S=p=>'<svg viewBox="0 0 16 16" width="44" height="44" shape-rendering="crispEdges" fill="none" stroke="#1b1b1b">'+p+"</svg>";
 const IC={hilo:S('<path d="M1.5 2.5h13v8h-6l-3 3v-3h-4z" fill="#cfd8dc"/><path d="M4 5.5h8M4 7.5h5"/>'),
 msg:S('<rect x="1.5" y="3.5" width="13" height="9" fill="#f1eee3"/><path d="M1.5 3.5l6.5 5 6.5-5"/>'),
@@ -104,8 +104,10 @@ const obs=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)retur
 function pump(c){const d=day;if(ty[c]||locked(c))return;
  const st=(D[d].ch||{})[c]||[],k=d+"|"+c,p=prog[k]||0,m=st[p];
  if(m==null||m[0]==">")return;
- ty[c]=1;if(A=="msg")render();
- setTimeout(()=>{prog[k]=p+1;save();ty[c]=0;if(m[0]=="~")sub(m.slice(1));if(A=="msg")render();hdr();if(d==day)pump(c)},m[0]=="~"?400:900+Math.min(m.length,60)*22)}
+ const first=p==0&&m[0]!="~"&&m[0]!=">";
+ ty[c]=1;if(!first&&A=="msg")render();
+ setTimeout(()=>{prog[k]=p+1;save();ty[c]=0;if(m[0]=="~")sub(m.slice(1));if(A=="msg")render();hdr();if(d==day)pump(c)},m[0]=="~"?400:first?0:900+Math.min(m.length,60)*22)}
+const bio=u=>{if(typeof u.b!="object")return u.b||"";let r="";for(const k in u.b)if(+k<=day)r=u.b[k];return r};
 function card(it,key,a){const p=E("div","p"),g=a=="gal",c=it[6]||[];
  let h=g?"":'<button class="u">'+it[0]+"</button>";
  if(it[2])h+='<div class="im">'+it[2]+"</div>";
@@ -118,15 +120,16 @@ function card(it,key,a){const p=E("div","p"),g=a=="gal",c=it[6]||[];
  return p}
 function prof(b){
  const u=U[PF]||{n:PF,b:"",a:"foto de perfil por defecto"};b.className="sp";
- b.append(E("div","pf",'<button id="bk">← Volver</button><div class="av">'+u.a+"</div><h2>"+u.n+'</h2><div class="d">'+PF+(u.i?" · "+u.i:"")+"</div><p>"+(u.b||"")+"</p>"));
+ b.append(E("div","pf",'<button id="bk">← Volver</button><div class="av">'+u.a+"</div><h2>"+u.n+'</h2><div class="d">'+PF+(u.i?" · "+u.i:"")+"</div><p>"+bio(u)+"</p>"));
  const col=E("div","col");b.append(col);let any=0;
  for(let d=day;d>=0;d--)["feed","gram"].forEach(k=>(D[d][k]||[]).forEach(it=>{if(it[0]==PF){any=1;col.append(card(it,null,k=="feed"?"hilo":"rollo"))}}));
  (u.pre||[]).forEach(it=>{any=1;col.append(card(it,null,"rollo"))});
  if(!any)col.innerHTML='<p class="d">Sin publicaciones.</p>';
+ if(u.sb&&!bio(u)&&!seen["sb"+PF]){seen["sb"+PF]=1;save();sub(u.sb)}
  $("bk").onclick=()=>{PF=null;render()}}
 function feed(b,a){
  const g=a=="gal",k=KEY[a];if(PF&&!g)return prof(b);b.className="sp";
- if(!g)b.append(E("h1","an",a=="hilo"?"Hilo":"Rollo"));
+ if(!g)b.append(E("h1","an",a=="hilo"?"SayIt":"Popping"));
  const col=E("div","col");b.append(col);let any=0;
  for(let d=day;d>=0;d--)(D[d][k]||[]).forEach((it,n)=>{any=1;col.append(card(it,k+"-"+d+"-"+n,a))});
  if(!any)col.innerHTML='<p class="d">Nada por ahora.</p>'}
@@ -137,15 +140,15 @@ function chat(b){
  (P[C]||[]).forEach(add);
  for(let d=0;d<=day;d++){const st=(D[d].ch||{})[C]||[],n=d<day?st.length:(prog[d+"|"+C]||0);st.slice(0,n).forEach(add)}
  const st=(D[day].ch||{})[C]||[],pn=prog[day+"|"+C]||0,nx=st[pn];
- if(ty[C]&&nx&&nx[0]!="~"&&nx[0]!=">")ms.append(E("div","m ty","<i></i><i></i><i></i>"));
+ if(ty[C]&&pn>0&&nx&&nx[0]!="~"&&nx[0]!=">")ms.append(E("div","m ty","<i></i><i></i><i></i>"));
  if(nx&&nx[0]==">"){const s=E("button","snd",nx.slice(1));s.onclick=()=>{prog[day+"|"+C]=pn+1;save();hdr();render();pump(C)};br.append(s)}
  else br.append(E("span","d","mensaje"));
  p.append(ms,br);b.append(l,p);ms.scrollTop=ms.scrollHeight}
 function web(b){
  b.className="wbw";
  if(day<1){b.innerHTML='<div class="in d">Sin páginas abiertas.</div>';return}
- b.append(E("div","br",'<span class="tab">deseos</span>'));
- b.append(E("div","ar","<b>deseos.net</b><span>Personas que usaron el sitio: <b>"+(7340+wish)+"</b></span>"));
+ b.append(E("div","br",'<span class="tab">UWish</span>'));
+ b.append(E("div","ar","<b>UWish.net</b><span>Personas que usaron el sitio: <b>"+(7340+wish)+"</b></span>"));
  const nt=E("div","nt",wish?"Tu deseo fue registrado.":""),g=E("div","gr");b.append(nt);
  W.forEach((w,i)=>{const e=E("div","w p"+i,"<span>"+w[0]+'</span><button class="cd'+(i==1?" inv":"")+'"><b>'+w[2]+"</b><small>"+w[1]+"</small></button>");
   e.lastChild.onclick=()=>{
@@ -162,9 +165,9 @@ function render(){
  ({hilo:()=>feed(b,"hilo"),rollo:()=>feed(b,"rollo"),gal:()=>feed(b,"gal"),msg:()=>chat(b),web:()=>web(b)})[A]()}
 function go(a){A=a;PF=null;
  if(a=="msg"){const c=cts();if(!C||!c.includes(C)||locked(C))C=c.find(x=>left(x)&&!locked(x))||c[0];pump(C)}
- $("wtt").textContent={hilo:"Hilo",msg:"Mensajes",rollo:"Rollo",gal:"Galería",web:"Navegador",tra:"Papelera"}[a];
+ $("wtt").textContent={hilo:"SayIt",msg:"Ping",rollo:"Popping",gal:"Galería",web:"Navegador",tra:"Papelera"}[a];
  $("wn").hidden=false;render()}
-[["hilo","Hilo"],["msg","Mensajes"],["rollo","Rollo"],["gal","Galería"],["web","Navegador"],["jgo","Juego"]].forEach(a=>{
+[["hilo","SayIt"],["msg","Ping"],["rollo","Popping"],["gal","Galería"],["web","Navegador"],["jgo","Juego"]].forEach(a=>{
  const b=E("button","i",IC[a[0]]+a[1]);b.id="i_"+a[0];if(a[0]=="jgo")b.disabled=true;else b.onclick=()=>go(a[0]);$("ic").append(b)});
 $("tr").innerHTML=IC.tra+"Papelera";$("tr").onclick=()=>go("tra");
 $("x").onclick=()=>{A=null;PF=null;$("wn").hidden=true};
