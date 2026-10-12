@@ -29,7 +29,8 @@ button:focus-visible{outline:2px dashed var(--red);outline-offset:2px}
 .col{flex:1;max-width:560px;margin:0 auto;overflow:auto;height:100%}
 .p{background:#f1eee3;border:1px solid #9a968a;border-radius:10px;padding:10px;margin-bottom:12px}
 .im{margin:6px 0;min-height:120px;background:repeating-linear-gradient(45deg,#b9b5a6 0 6px,#c6c2b3 6px 12px);display:grid;place-items:center;text-align:center;padding:8px;font-style:italic}
-.im.ph{padding:0;min-height:0;background:none;display:block}.im.ph img{display:block;width:100%;max-width:380px;aspect-ratio:1/1;object-fit:cover;border-radius:6px}
+.im.ph{padding:0;min-height:0;background:none;display:block}.im.ph.nat img{aspect-ratio:auto;max-width:100%;height:auto;object-fit:contain}
+.im.ph img{display:block;width:100%;max-width:380px;aspect-ratio:1/1;object-fit:cover;border-radius:6px}
 .ct{color:#5a574d;margin-top:4px}
 .cm{margin-top:6px;border-top:1px solid #c9c5b6;padding-top:4px}
 .cl{width:200px;border-right:1px solid #9a968a;padding:10px;overflow:auto;display:flex;flex-direction:column;gap:6px}
@@ -59,7 +60,7 @@ button:focus-visible{outline:2px dashed var(--red);outline-offset:2px}
 #sb:empty{display:none}
 #tk{height:48px;flex:none;background:#d4d4d4;border-top:2px solid #9a9a9a;display:flex;justify-content:space-between;align-items:center;padding:0 12px;z-index:10}
 #sl{opacity:.5}#sl.on{opacity:1;background:#e7d9a8}
-.u{background:none;border:0;padding:0;font-weight:bold;color:#2a3c70;text-decoration:underline}.cb{padding:1px 8px;margin-left:6px}.cms{margin-top:4px}.pf{width:30%;overflow:auto}.av{width:120px;height:120px;margin:10px 0;background:repeating-linear-gradient(45deg,#b9b5a6 0 6px,#c6c2b3 6px 12px);display:grid;place-items:center;text-align:center;font:italic 12px Tahoma;padding:6px}.av:has(img){padding:0;overflow:hidden}.av img{width:100%;height:100%;object-fit:cover;display:block}.ao{width:28px;height:28px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:6px}
+.u{background:none;border:0;padding:0;font-weight:bold;color:#2a3c70;text-decoration:underline}.cb{padding:1px 8px;margin-left:6px}.lk{background:none;border:0;padding:0;font:inherit;color:#1a47c8;text-decoration:underline;cursor:pointer}.cms{margin-top:4px}.pf{width:30%;overflow:auto}.av{width:120px;height:120px;margin:10px 0;background:repeating-linear-gradient(45deg,#b9b5a6 0 6px,#c6c2b3 6px 12px);display:grid;place-items:center;text-align:center;font:italic 12px Tahoma;padding:6px}.av:has(img){padding:0;overflow:hidden}.av img{width:100%;height:100%;object-fit:cover;display:block}.ao{width:28px;height:28px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:6px}
 .ty i{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:#6b685e;animation:bl 1s infinite}.ty i:nth-child(2){animation-delay:.2s}.ty i:nth-child(3){animation-delay:.4s}@keyframes bl{50%{opacity:.2}}
 #fd{position:fixed;inset:0;z-index:20;background:#000;color:#e8e4d4;font:48px Georgia,serif;display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .9s}
 #fd.on{opacity:1;pointer-events:auto}
@@ -84,9 +85,9 @@ tra:S('<path d="M4 4.5h8l-1 9H5z" fill="#cfd8dc"/><path d="M3 4.5h10M6.5 2.5h3v2
 const $=i=>document.getElementById(i),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
 const ip=f=>'src="'+f+'" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=\''+f+'\'}else{this.replaceWith(\'[falta '+f+']\')}"';
 const KEY={hilo:"feed",rollo:"gram",gal:"gal"};
-let day=0,seen={},prog={},wish=0,A=null,C=null,tm,was=0,ty={},PF=null;
-try{const s=JSON.parse(localStorage.getItem("deseo3")||"{}");day=s.day||0;seen=s.seen||{};prog=s.prog||{};wish=s.wish||0}catch(e){}
-const save=()=>{try{localStorage.setItem("deseo3",JSON.stringify({day,seen,prog,wish}))}catch(e){}};
+let day=0,seen={},prog={},wish=0,uw=0,A=null,C=null,tm,was=0,ty={},PF=null;
+try{const s=JSON.parse(localStorage.getItem("deseo3")||"{}");day=s.day||0;seen=s.seen||{};prog=s.prog||{};wish=s.wish||0;uw=s.uw||wish||0}catch(e){}
+const save=()=>{try{localStorage.setItem("deseo3",JSON.stringify({day,seen,prog,wish,uw}))}catch(e){}};
 function sub(t){$("sb").textContent=t||"";clearTimeout(tm);if(t)tm=setTimeout(()=>$("sb").textContent="",7000)}
 const cts=()=>{const s=Object.keys(P);for(let d=0;d<=day;d++)for(const c in D[d].ch||{})if(!s.includes(c))s.push(c);
  const o=(D[day].req||[]).concat(Object.keys(D[day].ch||{}));return s.sort((a,b)=>(o.indexOf(a)+1||99)-(o.indexOf(b)+1||99))};
@@ -95,8 +96,8 @@ const locked=c=>((D[day].need||{})[c]||[]).some(x=>KEY[x]?pend(x):left(x));
 const left=c=>((D[day].ch||{})[c]||[]).length-(prog[day+"|"+c]||0)>0;
 function pend(a){const d=D[day];
  if(a=="msg")return (d.req||[]).some(left);
- if(a=="web")return d.wish&&!wish;
- const k=KEY[a];return (d[k]||[]).some((it,n)=>it[5]&&!seen[k+"-"+day+"-"+n])}
+ if(a=="web")return !!(d.wish&&!wish&&uw);
+ const k=KEY[a];return (d[k]||[]).some((it,n)=>it[5]&&!seen[k+"-"+day+"-"+n])||(a=="hilo"&&!!d.wish&&!wish&&!uw)}
 const done=()=>["msg","web","hilo","rollo","gal"].every(a=>!pend(a));
 function hdr(){$("dl").textContent="Día "+(day+1)+" · "+D[day].t;const f=done();$("sl").className=f?"on":"";
  ["hilo","msg","rollo","gal","web"].forEach(a=>$("i_"+a).classList.toggle("bd",!!pend(a)));
@@ -110,15 +111,17 @@ function pump(c){const d=day;if(ty[c]||locked(c))return;
  ty[c]=1;if(!first&&A=="msg")render();
  setTimeout(()=>{prog[k]=p+1;save();ty[c]=0;if(m[0]=="~")sub(m.slice(1));if(A=="msg")render();hdr();if(d==day)pump(c)},m[0]=="~"?400:first?0:900+Math.min(m.length,60)*22)}
 const bio=u=>{if(typeof u.b!="object")return u.b||"";let r="";for(const k in u.b)if(+k<=day)r=u.b[k];return r};
+const LK=s=>s.replace(/uwish\.net/g,'<button class="lk">uwish.net</button>');
 function card(it,key,a){const p=E("div","p"),g=a=="gal",c=it[6]||[];
  const uf=U[it[0]]&&U[it[0]].f?'<img class="ao" '+ip(U[it[0]].f)+' alt="">':"";
  let h=g?"":'<button class="u">'+uf+it[0]+"</button>";
- const mm=it[2]&&/^\[([^\]]+)\]\s*([\s\S]*)$/.exec(it[2]),dsc=mm?mm[2]:it[2];
- if(it[2])h+=mm?'<div class="im ph"><img src="'+mm[1]+'" alt=""></div>':'<div class="im">'+it[2]+"</div>";
- if(it[1])h+="<p>"+it[1]+"</p>";
- if(!g)h+='<div class="ct">♡ '+it[3]+(a=="hilo"?"  ⇄ "+(it[3]/9|0):"")+'  <button class="cb">✎ '+c.length+'</button></div><div class="cms" hidden>'+(c.length?c.map(x=>'<div class="cm">'+x+"</div>").join(""):'<div class="cm d">Sin comentarios.</div>')+"</div>";
+ const mm=it[2]&&/^\[([^\]]+)\]\s*([\s\S]*)$/.exec(it[2]),dsc=mm?mm[2]:it[2],nat=mm&&mm[1][0]=="=",fn=mm?mm[1].replace(/^=/,""):"";
+ if(it[2])h+=mm?'<div class="im ph'+(nat?" nat":"")+'"><img src="'+fn+'" alt=""></div>':'<div class="im">'+it[2]+"</div>";
+ if(it[1])h+="<p>"+LK(it[1])+"</p>";
+ if(!g)h+='<div class="ct">♡ '+it[3]+(a=="hilo"?"  ⇄ "+(it[3]/9|0):"")+'  <button class="cb">✎ '+c.length+'</button></div><div class="cms" hidden>'+(c.length?c.map(x=>'<div class="cm">'+LK(x)+"</div>").join(""):'<div class="cm d">Sin comentarios.</div>')+"</div>";
  p.innerHTML=h;
- const gi=p.querySelector(".im.ph img");if(gi){gi.alt=dsc;const bs=mm[1].replace(/\.\w+$/,""),cd=[mm[1]].concat(["jpeg","jpg","png"].map(e=>bs+"."+e).filter(x=>x!=mm[1]));let ci=0;gi.onerror=()=>{ci++;if(ci<cd.length)gi.src=cd[ci];else{const bx=gi.parentNode;bx.className="im";bx.textContent=dsc}}}
+ const gi=p.querySelector(".im.ph img");if(gi){gi.alt=dsc;const bs=fn.replace(/\.\w+$/,""),cd=[fn].concat(["jpeg","jpg","png"].map(e=>bs+"."+e).filter(x=>x!=fn));let ci=0;gi.onerror=()=>{ci++;if(ci<cd.length)gi.src=cd[ci];else{const bx=gi.parentNode;bx.className="im";bx.textContent=dsc}}}
+ p.querySelectorAll(".lk").forEach(b=>b.onclick=()=>{uw=1;save();hdr();go("web")});
  const u=p.querySelector(".u");if(u)u.onclick=()=>{PF=it[0];render()};
  const cb=p.querySelector(".cb");if(cb)cb.onclick=()=>{const m=p.querySelector(".cms");m.hidden=!m.hidden};
  if(key){p.dataset.k=key;if(it[5]&&!seen[key])obs.observe(p)}
@@ -151,7 +154,7 @@ function chat(b){
  p.append(ms,br);b.append(l,p);ms.scrollTop=ms.scrollHeight}
 function web(b){
  b.className="wbw";
- if(day<1){b.innerHTML='<div class="in d">Sin páginas abiertas.</div>';return}
+ if(day<1||!uw){b.innerHTML='<div class="in d">Sin páginas abiertas.</div>';return}
  b.append(E("div","br",'<span class="tab">UWish</span>'));
  b.append(E("div","ar","<b>UWish.net</b><span>Personas que usaron el sitio: <b>"+(7340+wish)+"</b></span>"));
  const nt=E("div","nt",wish?"Tu deseo fue registrado.":""),g=E("div","gr");b.append(nt);
