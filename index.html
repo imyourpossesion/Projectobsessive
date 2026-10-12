@@ -29,6 +29,7 @@ button:focus-visible{outline:2px dashed var(--red);outline-offset:2px}
 .col{flex:1;max-width:560px;margin:0 auto;overflow:auto;height:100%}
 .p{background:#f1eee3;border:1px solid #9a968a;border-radius:10px;padding:10px;margin-bottom:12px}
 .im{margin:6px 0;min-height:120px;background:repeating-linear-gradient(45deg,#b9b5a6 0 6px,#c6c2b3 6px 12px);display:grid;place-items:center;text-align:center;padding:8px;font-style:italic}
+.im.ph{padding:0;min-height:0;background:none;display:block}.im.ph img{display:block;width:100%;max-width:380px;aspect-ratio:1/1;object-fit:cover;border-radius:6px}
 .ct{color:#5a574d;margin-top:4px}
 .cm{margin-top:6px;border-top:1px solid #c9c5b6;padding-top:4px}
 .cl{width:200px;border-right:1px solid #9a968a;padding:10px;overflow:auto;display:flex;flex-direction:column;gap:6px}
@@ -81,7 +82,7 @@ web:S('<rect x="1.5" y="2.5" width="13" height="11" fill="#f1eee3"/><path d="M1.
 jgo:S('<rect x="1.5" y="5.5" width="13" height="6" rx="2" fill="#b8b2d8"/><path d="M4 8.5h3M5.5 7v3"/><circle cx="11" cy="8.5" r=".8"/>'),
 tra:S('<path d="M4 4.5h8l-1 9H5z" fill="#cfd8dc"/><path d="M3 4.5h10M6.5 2.5h3v2M6.5 7v4M9.5 7v4"/>')};
 const $=i=>document.getElementById(i),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
-const ip=f=>'src="img/'+f+'" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=\''+f+'\'}else{this.replaceWith(\'[falta '+f+']\')}"';
+const ip=f=>'src="'+f+'" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=\''+f+'\'}else{this.replaceWith(\'[falta '+f+']\')}"';
 const KEY={hilo:"feed",rollo:"gram",gal:"gal"};
 let day=0,seen={},prog={},wish=0,A=null,C=null,tm,was=0,ty={},PF=null;
 try{const s=JSON.parse(localStorage.getItem("deseo3")||"{}");day=s.day||0;seen=s.seen||{};prog=s.prog||{};wish=s.wish||0}catch(e){}
@@ -112,10 +113,12 @@ const bio=u=>{if(typeof u.b!="object")return u.b||"";let r="";for(const k in u.b
 function card(it,key,a){const p=E("div","p"),g=a=="gal",c=it[6]||[];
  const uf=U[it[0]]&&U[it[0]].f?'<img class="ao" '+ip(U[it[0]].f)+' alt="">':"";
  let h=g?"":'<button class="u">'+uf+it[0]+"</button>";
- if(it[2])h+='<div class="im">'+it[2]+"</div>";
+ const mm=it[2]&&/^\[([^\]]+)\]\s*([\s\S]*)$/.exec(it[2]),dsc=mm?mm[2]:it[2];
+ if(it[2])h+=mm?'<div class="im ph"><img src="'+mm[1]+'" alt=""></div>':'<div class="im">'+it[2]+"</div>";
  if(it[1])h+="<p>"+it[1]+"</p>";
  if(!g)h+='<div class="ct">♡ '+it[3]+(a=="hilo"?"  ⇄ "+(it[3]/9|0):"")+'  <button class="cb">✎ '+c.length+'</button></div><div class="cms" hidden>'+(c.length?c.map(x=>'<div class="cm">'+x+"</div>").join(""):'<div class="cm d">Sin comentarios.</div>')+"</div>";
  p.innerHTML=h;
+ const gi=p.querySelector(".im.ph img");if(gi){gi.alt=dsc;const bs=mm[1].replace(/\.\w+$/,""),cd=[mm[1]].concat(["jpeg","jpg","png"].map(e=>bs+"."+e).filter(x=>x!=mm[1]));let ci=0;gi.onerror=()=>{ci++;if(ci<cd.length)gi.src=cd[ci];else{const bx=gi.parentNode;bx.className="im";bx.textContent=dsc}}}
  const u=p.querySelector(".u");if(u)u.onclick=()=>{PF=it[0];render()};
  const cb=p.querySelector(".cb");if(cb)cb.onclick=()=>{const m=p.querySelector(".cms");m.hidden=!m.hidden};
  if(key){p.dataset.k=key;if(it[5]&&!seen[key])obs.observe(p)}
