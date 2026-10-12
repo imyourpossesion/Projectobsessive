@@ -74,7 +74,7 @@ try{const s=JSON.parse(localStorage.getItem("deseo")||"{}");day=s.day||0;seen=s.
 const save=()=>{try{localStorage.setItem("deseo",JSON.stringify({day,seen,wish}))}catch(e){}};
 function sub(t){$("sb").textContent=t||"";clearTimeout(tm);if(t)tm=setTimeout(()=>$("sb").textContent="",7000)}
 function done(){const d=D[day];return d.i.every((it,n)=>!it.r||seen[day+"-"+n])&&(!d.wish||wish)}
-function top(){$("dl").textContent="Día "+(day+1)+" · "+D[day].t;$("sl").className=done()?"on":""}
+function hdr(){$("dl").textContent="Día "+(day+1)+" · "+D[day].t;$("sl").className=done()?"on":""}
 function render(){
  const w=$("win");w.dataset.t={msg:"Mensajes",feed:"Red",foto:"Fotos",web:"Navegador"}[A];
  document.querySelectorAll("#dk button").forEach(b=>b.className=b.dataset.a==A?"a":"");
@@ -84,7 +84,7 @@ function render(){
   const it=D[d].i[n];if(it.a!=A)continue;any=1;const k=d+"-"+n;
   const c=document.createElement("div");c.className="c"+(seen[k]?"":" n");
   c.innerHTML="<b>"+it.w+"</b><i>día "+(d+1)+"</i><p>"+(seen[k]?it.x:"Mensaje nuevo (tocá para abrir)")+"</p>"+(A=="foto"?'<div class="ph"></div>':"");
-  c.onclick=()=>{if(!seen[k]){seen[k]=1;save();sub(it.s);top();render()}};
+  c.onclick=()=>{if(!seen[k]){seen[k]=1;save();sub(it.s);hdr();render()}};
   box.appendChild(c)}
  if(!any)box.innerHTML='<p class="d">Nada por ahora.</p>'}
 function web(w){
@@ -98,12 +98,12 @@ function web(w){
   if(wish){m.textContent="Ya pediste tu deseo.";return}
   m.innerHTML='¿Es alguien en específico? <button id="y">Sí</button> <button id="no">No</button>';
   $("y").onclick=()=>{m.textContent="";sub("No. No quiero pedir a alguien que ya me rechazó.")};
-  $("no").onclick=()=>{wish=1;save();top();render();sub("Listo. Ya está. Qué tontería.")}})}
+  $("no").onclick=()=>{wish=1;save();hdr();render();sub("Listo. Ya está. Qué tontería.")}})}
 $("sl").onclick=()=>{
  if(!done()){sub("Todavía me falta ver algo.");return}
  if(day+1>=D.length){$("win").dataset.t="Fin";$("win").innerHTML='<div class="in"><h3>Fin de la beta</h3><p>Gracias por jugar. Contale a Claude qué te gustó y qué no.</p></div>';sub("");return}
- day++;save();top();render();sub(D[day].t)};
+ day++;save();hdr();render();sub(D[day].t)};
 $("rs").onclick=()=>{if(confirm("¿Reiniciar el juego?")){try{localStorage.removeItem("deseo")}catch(e){}location.reload()}};
 document.querySelectorAll("#dk button").forEach(b=>b.onclick=()=>{A=b.dataset.a;render()});
-top();render();sub(D[day].t+(day?"":" Abrí las apps. Cuando termines, dormí."));
+hdr();render();sub(D[day].t+(day?"":" Abrí las apps. Cuando termines, dormí."));
 </script></body></html>
