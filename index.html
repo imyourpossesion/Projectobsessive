@@ -58,7 +58,7 @@ button:focus-visible{outline:2px dashed var(--red);outline-offset:2px}
 #sb:empty{display:none}
 #tk{height:48px;flex:none;background:#d4d4d4;border-top:2px solid #9a9a9a;display:flex;justify-content:space-between;align-items:center;padding:0 12px;z-index:10}
 #sl{opacity:.5}#sl.on{opacity:1;background:#e7d9a8}
-.u{background:none;border:0;padding:0;font-weight:bold;color:#2a3c70;text-decoration:underline}.cb{padding:1px 8px;margin-left:6px}.cms{margin-top:4px}.pf{width:30%;overflow:auto}.av{width:120px;height:120px;margin:10px 0;background:repeating-linear-gradient(45deg,#b9b5a6 0 6px,#c6c2b3 6px 12px);display:grid;place-items:center;text-align:center;font:italic 12px Tahoma;padding:6px}
+.u{background:none;border:0;padding:0;font-weight:bold;color:#2a3c70;text-decoration:underline}.cb{padding:1px 8px;margin-left:6px}.cms{margin-top:4px}.pf{width:30%;overflow:auto}.av{width:120px;height:120px;margin:10px 0;background:repeating-linear-gradient(45deg,#b9b5a6 0 6px,#c6c2b3 6px 12px);display:grid;place-items:center;text-align:center;font:italic 12px Tahoma;padding:6px}.av:has(img){padding:0;overflow:hidden}.av img{width:100%;height:100%;object-fit:cover;display:block}.ao{width:28px;height:28px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:6px}
 .ty i{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:#6b685e;animation:bl 1s infinite}.ty i:nth-child(2){animation-delay:.2s}.ty i:nth-child(3){animation-delay:.4s}@keyframes bl{50%{opacity:.2}}
 #fd{position:fixed;inset:0;z-index:20;background:#000;color:#e8e4d4;font:48px Georgia,serif;display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .9s}
 #fd.on{opacity:1;pointer-events:auto}
@@ -109,7 +109,8 @@ function pump(c){const d=day;if(ty[c]||locked(c))return;
  setTimeout(()=>{prog[k]=p+1;save();ty[c]=0;if(m[0]=="~")sub(m.slice(1));if(A=="msg")render();hdr();if(d==day)pump(c)},m[0]=="~"?400:first?0:900+Math.min(m.length,60)*22)}
 const bio=u=>{if(typeof u.b!="object")return u.b||"";let r="";for(const k in u.b)if(+k<=day)r=u.b[k];return r};
 function card(it,key,a){const p=E("div","p"),g=a=="gal",c=it[6]||[];
- let h=g?"":'<button class="u">'+it[0]+"</button>";
+ const uf=U[it[0]]&&U[it[0]].f?'<img class="ao" src="img/'+U[it[0]].f+'" alt="">':"";
+ let h=g?"":'<button class="u">'+uf+it[0]+"</button>";
  if(it[2])h+='<div class="im">'+it[2]+"</div>";
  if(it[1])h+="<p>"+it[1]+"</p>";
  if(!g)h+='<div class="ct">♡ '+it[3]+(a=="hilo"?"  ⇄ "+(it[3]/9|0):"")+'  <button class="cb">✎ '+c.length+'</button></div><div class="cms" hidden>'+(c.length?c.map(x=>'<div class="cm">'+x+"</div>").join(""):'<div class="cm d">Sin comentarios.</div>')+"</div>";
@@ -120,7 +121,7 @@ function card(it,key,a){const p=E("div","p"),g=a=="gal",c=it[6]||[];
  return p}
 function prof(b){
  const u=U[PF]||{n:PF,b:"",a:"foto de perfil por defecto"};b.className="sp";
- b.append(E("div","pf",'<button id="bk">← Volver</button><div class="av">'+u.a+"</div><h2>"+u.n+'</h2><div class="d">'+PF+(u.i?" · "+u.i:"")+"</div><p>"+bio(u)+"</p>"));
+ b.append(E("div","pf",'<button id="bk">← Volver</button><div class="av">'+(u.f?'<img src="img/'+u.f+'" alt="'+u.a+'">':u.a)+"</div><h2>"+u.n+'</h2><div class="d">'+PF+(u.i?" · "+u.i:"")+"</div><p>"+bio(u)+"</p>"));
  const col=E("div","col");b.append(col);let any=0;
  for(let d=day;d>=0;d--)["feed","gram"].forEach(k=>(D[d][k]||[]).forEach(it=>{if(it[0]==PF){any=1;col.append(card(it,null,k=="feed"?"hilo":"rollo"))}}));
  (u.pre||[]).forEach(it=>{any=1;col.append(card(it,null,"rollo"))});

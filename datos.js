@@ -44,18 +44,18 @@ feed:[["@noticias24","Ola de frío polar: bajan las temperaturas desde el vierne
 gram:[["@lu_vz","","Lucía abrazando a su gato, de vuelta en casa",380]]}
 ];
 
-/* USUARIOS. n=nombre b=bio a=foto de perfil (descripción) i=info extra pre=publicaciones de antes del juego */
+/* USUARIOS. n=nombre b=bio a=foto de perfil (descripción, se usa de alt) f=archivo de la foto de perfil (carpeta img/) i=info extra pre=publicaciones de antes del juego */
 const U={
-"@miloo.idk":{n:"Milo",b:"",sb:"Nunca se me ocurrió qué poner en la bio.",a:"selfie de espaldas con una cámara colgada del cuello",pre:[
+"@miloo.idk":{n:"Milo",b:"",sb:"Nunca se me ocurrió qué poner en la bio.",a:"selfie de espaldas con una cámara colgada del cuello",f:"perfil_miloo.idk.png",pre:[
 ["@miloo.idk","mi escritorio a las 3am","foto: escritorio con monitor y una caja de Lego de Spider-Man",14],
 ["@miloo.idk","por fin el azul en vinilo","foto: disco azul de Weezer sobre la cama",9],
 ["@miloo.idk","la cámara de mi papá, rollo nuevo","foto: cámara de rollo vieja sobre un libro",6],
 ["@miloo.idk","mi plaza de siempre","foto en blanco y negro: una plaza con un banco y un kiosco de toldo verde",11]]},
-"@lu_vz":{n:"Lucía",b:"5.º B · gym · mi gato se llama Mochi 🐱",a:"selfie en el espejo del gimnasio"},
-"@sofi.m":{n:"Sofi",b:"5.º B · fotos de mi perro y de comida",a:"foto con su perro"},
-"@tomi_gol":{n:"Tomi",b:"fútbol, bici y pizza",a:"foto con camiseta de fútbol"},
-"@Francoco":{n:"Franco",b:"motos y zapatillas",a:"foto de espaldas junto a una moto"},
-"@vera.jpg":{n:"Vera",b:{2:"",3:"tarot, té y noches largas ✦ Weezer ✦ fotos de rollo"},a:"taza de té sobre una ventana",i:"Se unió hace poco"},
-"@foro_anon":{n:"anónimo",b:"",a:"avatar gris por defecto"},
-"@memes_3am":{n:"memes a las 3am",b:"memes para gente que no duerme",a:"luna con ojeras"},
-"@noticias24":{n:"Noticias 24",b:"las noticias del día",a:"logo azul con un reloj"}};
+"@lu_vz":{n:"Lucía",b:"5.º B · gym · mi gato se llama Mochi 🐱",a:"selfie en el espejo del gimnasio",f:"perfil_lu_vz.png"},
+"@sofi.m":{n:"Sofi",b:"5.º B · fotos de mi perro y de comida",a:"foto con su perro",f:"perfil_sofi.m.png"},
+"@tomi_gol":{n:"Tomi",b:"fútbol, bici y pizza",a:"foto con camiseta de fútbol",f:"perfil_tomi_gol.png"},
+"@Francoco":{n:"Franco",b:"motos y zapatillas",a:"foto de espaldas junto a una moto",f:"perfil_Francoco.png"},
+"@vera.jpg":{n:"Vera",b:{2:"",3:"tarot, té y noches largas ✦ Weezer ✦ fotos de rollo"},a:"taza de té sobre una ventana",f:"perfil_vera.jpg.png",i:"Se unió hace poco"},
+"@foro_anon":{n:"anónimo",b:"",a:"avatar gris por defecto",f:"perfil_foro_anon.png"},
+"@memes_3am":{n:"memes a las 3am",b:"memes para gente que no duerme",a:"luna con ojeras",f:"perfil_memes_3am.png"},
+"@noticias24":{n:"Noticias 24",b:"las noticias del día",a:"logo azul con un reloj",f:"perfil_noticias24.png"}};
