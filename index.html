@@ -81,7 +81,7 @@ web:S('<rect x="1.5" y="2.5" width="13" height="11" fill="#f1eee3"/><path d="M1.
 jgo:S('<rect x="1.5" y="5.5" width="13" height="6" rx="2" fill="#b8b2d8"/><path d="M4 8.5h3M5.5 7v3"/><circle cx="11" cy="8.5" r=".8"/>'),
 tra:S('<path d="M4 4.5h8l-1 9H5z" fill="#cfd8dc"/><path d="M3 4.5h10M6.5 2.5h3v2M6.5 7v4M9.5 7v4"/>')};
 const $=i=>document.getElementById(i),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
-const ip=f=>'src="img/'+f+'" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=\''+f+'\'}"';
+const ip=f=>'src="img/'+f+'" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=\''+f+'\'}else{this.replaceWith(\'[falta '+f+']\')}"';
 const KEY={hilo:"feed",rollo:"gram",gal:"gal"};
 let day=0,seen={},prog={},wish=0,A=null,C=null,tm,was=0,ty={},PF=null;
 try{const s=JSON.parse(localStorage.getItem("deseo3")||"{}");day=s.day||0;seen=s.seen||{};prog=s.prog||{};wish=s.wish||0}catch(e){}
